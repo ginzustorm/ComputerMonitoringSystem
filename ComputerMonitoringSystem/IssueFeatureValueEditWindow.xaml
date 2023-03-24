@@ -1,0 +1,24 @@
+﻿<Window x:Class="ComputerMonitoringSystem.IssueFeatureValueEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Edit Issue Feature Value" Height="300" Width="400">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Issue" Grid.Row="0"/>
+        <ComboBox x:Name="cbIssues" Grid.Row="1" Grid.Column="1" Margin="5" DisplayMemberPath="Name" SelectedValuePath="Id"/>
+
+        <TextBlock Text="Feature Value" Grid.Row="2" Margin="0,0,0,184" Grid.RowSpan="2"/>
+        <ComboBox x:Name="cbFeatureValues" Grid.Row="2" Margin="5,16,5,178" DisplayMemberPath="Value" SelectedValuePath="Id" Grid.RowSpan="2"/>
+
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="btnSave" Content="Save" Margin="0,0,10,0" Click="btnSave_Click" Height="136"/>
+            <Button x:Name="btnCancel" Content="Cancel" Click="btnCancel_Click" Height="135"/>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,29 @@
+﻿<Window x:Class="ComputerMonitoringSystem.IssueFeatureValuesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Issue Feature Values" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="5">
+            <Button x:Name="btnAdd" Content="Add" Click="btnAdd_Click" Margin="5"/>
+            <Button x:Name="btnEdit" Content="Edit" Click="btnEdit_Click" Margin="5"/>
+            <Button x:Name="btnDelete" Content="Delete" Click="btnDelete_Click" Margin="5"/>
+        </StackPanel>
+
+        <DataGrid x:Name="dataGridIssueFeatureValues" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding Id}" IsReadOnly="True" Width="Auto"/>
+                <DataGridTextColumn Header="Issue" Binding="{Binding IssueName}" IsReadOnly="True" Width="*"/>
+                <DataGridTextColumn Header="Feature Value" Binding="{Binding FeatureValue}" IsReadOnly="True" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
+

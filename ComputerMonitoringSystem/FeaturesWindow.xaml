@@ -1,0 +1,32 @@
+﻿<Window x:Class="ComputerMonitoringSystem.FeaturesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Редактор признаков" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="18" Text="ВВЕДИТЕ ПРИЗНАК" Margin="5"/>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
+            <TextBox x:Name="featureNameTextBox" Width="200" Margin="5"/>
+            <Button x:Name="addFeatureButton" Content="Добавить признак" Margin="5" Click="addFeatureButton_Click"/>
+        </StackPanel>
+
+        <TextBlock Grid.Row="2" FontWeight="Bold" FontSize="18" Text="СПИСОК ИМЕЮЩИХСЯ ПРИЗНАКОВ" Margin="5"/>
+
+        <ListBox x:Name="featuresListBox" Grid.Row="3" Margin="5">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}" Margin="5"/>
+                        <Button Content="Удалить" Margin="5" Click="deleteFeatureButton_Click"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>

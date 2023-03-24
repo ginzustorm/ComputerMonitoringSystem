@@ -1,0 +1,11 @@
+﻿<Window x:Class="ComputerMonitoringSystem.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Welcome" Height="300" Width="400">
+    <Grid>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Button Name="KnowledgeBaseEditorButton" Content="Редактор базы знаний" Click="KnowledgeBaseEditorButton_Click" Width="200" Height="50" Margin="0,0,0,10" />
+            <Button Name="ProblemSolverButton" Content="Решатель задач" Click="ProblemSolverButton_Click" Width="200" Height="50" />
+        </StackPanel>
+    </Grid>
+</Window>

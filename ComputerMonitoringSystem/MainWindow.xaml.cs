@@ -26,7 +26,7 @@ namespace ComputerMonitoringSystem
 
         private void ProblemSolverButton_Click(object sender, RoutedEventArgs e)
         {
-            var troubleshooter = new ComputerTroubleshooter(_context);
+            var troubleshooter = new ComputerTroubleshooterImplicative(_context);
             var problemSolverWindow = new ProblemSolverWindow(troubleshooter, _context);
             problemSolverWindow.Show();
         }

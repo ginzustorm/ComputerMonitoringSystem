@@ -11,13 +11,13 @@ namespace ComputerMonitoringSystem
     public partial class ProblemSolverWindow : Window
     {
         private readonly AppDbContext _context;
-        private readonly ComputerTroubleshooter _troubleshooter;
+        private readonly ComputerTroubleshooterImplicative _troubleshooter;
         private readonly List<Feature> _features;
         private readonly List<FeatureValue> _featureValues;
         private List<int> _selectedFeatureValueIds;
 
 
-        public ProblemSolverWindow(ComputerTroubleshooter troubleshooter, AppDbContext context)
+        public ProblemSolverWindow(ComputerTroubleshooterImplicative troubleshooter, AppDbContext context)
         {
             InitializeComponent();
             _troubleshooter = troubleshooter;

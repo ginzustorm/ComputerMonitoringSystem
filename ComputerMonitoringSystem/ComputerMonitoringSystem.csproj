@@ -206,6 +206,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ComputerTroubleshooter.cs" />
+    <Compile Include="ComputerTroubleshooterImplicative.cs" />
     <Compile Include="Data\AppDbContext.cs" />
     <Compile Include="FeaturesWindow.xaml.cs">
       <DependentUpon>FeaturesWindow.xaml</DependentUpon>

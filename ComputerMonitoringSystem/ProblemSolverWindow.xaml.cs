@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -69,6 +71,31 @@ namespace ComputerMonitoringSystem
 
             // Отобразите результат в нужном элементе управления, например, в TextBlock
             ResultTextBox.Text = result;
+        }
+
+        private void SaveLog_Click(object sender, RoutedEventArgs e)
+        {
+            var logFileName = "ComputerMonitoringSystemLog.txt";
+            var selectedFeatureValues = _context.FeatureValues
+                .Where(fv => _selectedFeatureValueIds.Contains(fv.Id))
+                .ToList();
+
+            using (StreamWriter writer = File.AppendText(logFileName))
+            {
+                writer.WriteLine("Дата: {0}", DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
+                writer.WriteLine("Выбранные признаки:");
+
+                foreach (var featureValue in selectedFeatureValues)
+                {
+                    writer.WriteLine(" - {0}: {1}", _context.Features.First(f => f.Id == featureValue.FeatureId).Name, featureValue.Value);
+                }
+
+                writer.WriteLine("Результат работы программы:");
+                writer.WriteLine(ResultTextBox.Text);
+                writer.WriteLine(new string('-', 80));
+            }
+
+            MessageBox.Show("Журнал сохранен в файле " + logFileName, "Сохранение журнала", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

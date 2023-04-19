@@ -13,6 +13,8 @@ namespace ComputerMonitoringSystem
         public class IssueFeatureValueDisplay
         {
             public int Id { get; set; }
+            public int IssueId { get; set; }
+            public int FeatureValueId { get; set; }
             public string IssueName { get; set; }
             public string FeatureValue { get; set; }
         }
@@ -91,20 +93,27 @@ namespace ComputerMonitoringSystem
         {
             if (dataGridIssueFeatureValues.SelectedItem is IssueFeatureValueDisplay selectedDisplayItem)
             {
-                var issueFeatureValue = _context.IssueFeatureValues.Find(selectedDisplayItem.Id);
-                _context.IssueFeatureValues.Remove(issueFeatureValue);
-                _context.SaveChanges();
+                var issueFeatureValue = _context.IssueFeatureValues.FirstOrDefault(ifv => ifv.IssueId == selectedDisplayItem.IssueId && ifv.FeatureValueId == selectedDisplayItem.FeatureValueId);
+
+                if (issueFeatureValue != null)
+                {
+                    _context.IssueFeatureValues.Remove(issueFeatureValue);
+                    _context.SaveChanges();
+                }
 
                 dataGridIssueFeatureValues.ItemsSource = _context.IssueFeatureValues
                     .Select(ifv => new IssueFeatureValueDisplay
                     {
                         Id = ifv.Id,
+                        IssueId = ifv.IssueId,
+                        FeatureValueId = ifv.FeatureValueId,
                         IssueName = ifv.Issue.Name,
                         FeatureValue = ifv.FeatureValue.Value
                     })
                     .ToList();
             }
         }
+
     }
 }
 

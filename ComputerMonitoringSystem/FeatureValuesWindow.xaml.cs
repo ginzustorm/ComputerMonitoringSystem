@@ -11,6 +11,7 @@ namespace ComputerMonitoringSystem
     public partial class FeatureValuesWindow : Window
     {
         private readonly AppDbContext _dbContext;
+        private Feature _selectedFeature;
 
         public FeatureValuesWindow()
         {
@@ -18,7 +19,16 @@ namespace ComputerMonitoringSystem
             _dbContext = new AppDbContext();
 
             LoadFeatures();
-            LoadFeatureValues();
+            cbFeatures.SelectionChanged += CbFeatures_SelectionChanged;
+        }
+
+        private void CbFeatures_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbFeatures.SelectedItem is Feature selectedFeature)
+            {
+                _selectedFeature = selectedFeature;
+                LoadFeatureValues(_selectedFeature.Id);
+            }
         }
 
         private void LoadFeatures()
@@ -27,30 +37,29 @@ namespace ComputerMonitoringSystem
             cbFeatures.ItemsSource = features;
         }
 
-        private void LoadFeatureValues()
+        private void LoadFeatureValues(int featureId)
         {
-            var featureValues = _dbContext.FeatureValues.Include("Feature").ToList();
+            var featureValues = _dbContext.FeatureValues.Where(fv => fv.FeatureId == featureId).Include("Feature").ToList();
             listBoxFeatureValues.ItemsSource = featureValues;
         }
 
         private void btnAddFeatureValue_Click(object sender, RoutedEventArgs e)
         {
-            if (cbFeatures.SelectedItem == null || string.IsNullOrWhiteSpace(tbFeatureValue.Text))
+            if (_selectedFeature == null || string.IsNullOrWhiteSpace(tbFeatureValue.Text))
             {
                 MessageBox.Show("Выберите признак и введите значение.");
                 return;
             }
 
-            var feature = (Feature)cbFeatures.SelectedItem;
             var newValue = new FeatureValue
             {
-                FeatureId = feature.Id,
+                FeatureId = _selectedFeature.Id,
                 Value = tbFeatureValue.Text.Trim()
             };
 
             _dbContext.FeatureValues.Add(newValue);
             _dbContext.SaveChanges();
-            LoadFeatureValues();
+            LoadFeatureValues(_selectedFeature.Id);
             tbFeatureValue.Clear();
         }
 
@@ -61,7 +70,7 @@ namespace ComputerMonitoringSystem
 
             _dbContext.FeatureValues.Remove(featureValueToRemove);
             _dbContext.SaveChanges();
-            LoadFeatureValues();
+            LoadFeatureValues(_selectedFeature.Id);
         }
     }
 }

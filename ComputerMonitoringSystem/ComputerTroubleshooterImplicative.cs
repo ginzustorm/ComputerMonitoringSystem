@@ -63,12 +63,8 @@ public class ComputerTroubleshooterImplicative
         //Иначе Unable to determine the issue.
         if (potentialIssues.Count > 0)
         {
-            return string.Join("\n", potentialIssues.Select(issue => $"{issue.Name}: {issue.Description}"));
-        }
-        else
-        {
+            // Отрицание условий, когда выбраны все нормальные значения признаков
             bool allNormal = true;
-
             foreach (var userSelectedFeatureValue in userSelectedFeatureValues)
             {
                 var normalFeatureValue = normalFeatureValues.FirstOrDefault(nfv => nfv.FeatureId == userSelectedFeatureValue.FeatureId);
@@ -80,6 +76,31 @@ public class ComputerTroubleshooterImplicative
                 }
             }
 
+            // Если выбраны все нормальные значения признаков, отрицаем потенциальные проблемы и возвращаем "No issues detected"
+            if (allNormal)
+            {
+                return "No issues detected.";
+            }
+            else
+            {
+                return string.Join("\n", potentialIssues.Select(issue => $"{issue.Name}: {issue.Description}"));
+            }
+        }
+            else
+            {
+                bool allNormal = true;
+
+                foreach (var userSelectedFeatureValue in userSelectedFeatureValues)
+                {
+                    var normalFeatureValue = normalFeatureValues.FirstOrDefault(nfv => nfv.FeatureId == userSelectedFeatureValue.FeatureId);
+
+                    if (normalFeatureValue == null || normalFeatureValue.Value != userSelectedFeatureValue.Value)
+                    {
+                        allNormal = false;
+                        break;
+                    }
+                }
+
             if (allNormal)
             {
                 return "No issues detected.";
@@ -90,6 +111,5 @@ public class ComputerTroubleshooterImplicative
             }
         }
     }
-
-
 }
+

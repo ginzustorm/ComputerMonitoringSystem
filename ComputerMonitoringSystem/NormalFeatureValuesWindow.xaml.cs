@@ -23,9 +23,15 @@ namespace ComputerMonitoringSystem
             if (cbFeatures.SelectedItem is Feature selectedFeature)
             {
                 _selectedFeature = selectedFeature;
-                lbAllFeatureValues.ItemsSource = _context.FeatureValues.ToList();
+                UpdateFeatureValuesList(_selectedFeature.Id);
                 lbNormalFeatureValues.ItemsSource = _context.NormalFeatureValues.Where(nfv => nfv.FeatureId == _selectedFeature.Id).ToList();
             }
+        }
+
+        private void UpdateFeatureValuesList(int featureId)
+        {
+            var featureValues = _context.FeatureValues.Where(fv => fv.FeatureId == featureId).ToList();
+            lbAllFeatureValues.ItemsSource = featureValues;
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
@@ -54,4 +60,3 @@ namespace ComputerMonitoringSystem
         }
     }
 }
-

@@ -20,6 +20,7 @@
 
             <TextBox Name="ResultTextBox" Grid.Row="0" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
             <Button Name="SolveButton" Grid.Row="1" Content="Решить задачу" Click="SolveProblem_Click" Width="150" Height="40" HorizontalAlignment="Right" Margin="0,10,0,0"/>
+            <Button Name="SaveLogButton" Grid.Row="1" Content="Сохранить журнал" Click="SaveLog_Click" Width="150" Height="40" HorizontalAlignment="Left" Margin="0,10,0,0"/>
         </Grid>
     </Grid>
 </Window>

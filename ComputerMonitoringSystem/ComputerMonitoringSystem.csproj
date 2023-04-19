@@ -244,9 +244,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\20230323061005_InitialCreate.cs" />
-    <Compile Include="Migrations\20230323061005_InitialCreate.designer.cs">
-      <DependentUpon>20230323061005_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\20230419004531_InitialMigration.cs" />
+    <Compile Include="Migrations\20230419004531_InitialMigration.designer.cs">
+      <DependentUpon>20230419004531_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\AppDbContextModelSnapshot.cs" />
     <Compile Include="Models\NormalFeatureValue.cs" />

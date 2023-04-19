@@ -14,11 +14,9 @@ namespace ComputerMonitoringSystem
     {
         private readonly AppDbContext _context;
         private readonly ComputerTroubleshooterImplicative _troubleshooter;
-        private readonly List<Feature> _features;
-        private readonly List<FeatureValue> _featureValues;
         private List<int> _selectedFeatureValueIds;
 
-
+        // Конструктор класса ProblemSolverWindow
         public ProblemSolverWindow(ComputerTroubleshooterImplicative troubleshooter, AppDbContext context)
         {
             InitializeComponent();
@@ -28,6 +26,7 @@ namespace ComputerMonitoringSystem
             LoadFeaturesAndValues();
         }
 
+        // Загружает признаки и значения признаков и добавляет их в Expander
         private async void LoadFeaturesAndValues()
         {
             var features = await _context.Features.Include(f => f.FeatureValues).ToListAsync();
@@ -54,6 +53,7 @@ namespace ComputerMonitoringSystem
             }
         }
 
+        // Обработчик события для добавления выбранного значения признака в список
         private void FeatureValue_Checked(object sender, RoutedEventArgs e)
         {
             var radioButton = sender as RadioButton;
@@ -61,6 +61,7 @@ namespace ComputerMonitoringSystem
             _selectedFeatureValueIds.Add(featureValueId);
         }
 
+        // Обработчик события для решения проблемы и вывода результатов
         private void SolveProblem_Click(object sender, RoutedEventArgs e)
         {
             var selectedFeatureValues = _context.FeatureValues
@@ -69,10 +70,11 @@ namespace ComputerMonitoringSystem
 
             var result = _troubleshooter.Diagnose(selectedFeatureValues);
 
-            // Отобразите результат в нужном элементе управления, например, в TextBlock
+            // Отображение результата в текстовом блоке
             ResultTextBox.Text = result;
         }
 
+        // Обработчик события для сохранения журнала
         private void SaveLog_Click(object sender, RoutedEventArgs e)
         {
             var logFileName = "ComputerMonitoringSystemLog.txt";
@@ -88,7 +90,7 @@ namespace ComputerMonitoringSystem
                 foreach (var featureValue in selectedFeatureValues)
                 {
                     writer.WriteLine(" - {0}: {1}", _context.Features.First(f => f.Id == featureValue.FeatureId).Name, featureValue.Value);
-                }
+            }
 
                 writer.WriteLine("Результат работы программы:");
                 writer.WriteLine(ResultTextBox.Text);

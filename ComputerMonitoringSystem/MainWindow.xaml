@@ -1,11 +1,64 @@
 ﻿<Window x:Class="ComputerMonitoringSystem.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Welcome" Height="300" Width="400">
-    <Grid>
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Title="ИИС Мониторинг состояния компьютера" Height="300" Width="400">
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FF4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Direction="270" ShadowDepth="2" Color="Gray" Opacity="0.5" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF3F51B5"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#FF303F9F"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Background="#F5F5F5">
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button Name="KnowledgeBaseEditorButton" Content="Редактор базы знаний" Click="KnowledgeBaseEditorButton_Click" Width="200" Height="50" Margin="0,0,0,10" />
-            <Button Name="ProblemSolverButton" Content="Решатель задач" Click="ProblemSolverButton_Click" Width="200" Height="50" />
+            <Button Name="KnowledgeBaseEditorButton" Click="KnowledgeBaseEditorButton_Click" Width="212" Height="50" Margin="0,0,0,10">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="BookOpen" Width="24" Height="24" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBlock Text="Редактор базы знаний"/>
+                </StackPanel>
+                <Button.ToolTip>
+                    <ToolTip>
+                        <TextBlock Text="Открыть редактор базы знаний"/>
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
+            <Button Name="ProblemSolverButton" Click="ProblemSolverButton_Click" Width="214" Height="50">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Lightbulb" Width="24" Height="24" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBlock Text="Решатель задач"/>
+                </StackPanel>
+                <Button.ToolTip>
+                    <ToolTip>
+                        <TextBlock Text="Открыть решатель задач"/>
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>

@@ -49,6 +49,13 @@ public class ComputerTroubleshooterImplicative
         {
             var ruleKey = Tuple.Create(userSelectedFeatureValue.FeatureId, userSelectedFeatureValue.Value);
 
+            // Проверяем, является ли выбранное значение признака нормальным
+            var normalFeatureValue = normalFeatureValues.FirstOrDefault(nfv => nfv.FeatureId == userSelectedFeatureValue.FeatureId);
+            if (normalFeatureValue != null && normalFeatureValue.Value == userSelectedFeatureValue.Value)
+            {
+                continue; // Пропускаем итерацию, если значение признака является нормальным
+            }
+
             if (implicationalRules.ContainsKey(ruleKey))
             {
                 potentialIssues.AddRange(implicationalRules[ruleKey]);

@@ -1,6 +1,5 @@
 ﻿using ComputerMonitoringSystem.Data;
 using ComputerMonitoringSystem.Models;
-using System;
 using System.Linq;
 using System.Windows;
 
@@ -9,110 +8,68 @@ namespace ComputerMonitoringSystem
     public partial class IssueFeatureValuesWindow : Window
     {
         private readonly AppDbContext _context;
-
-        public class IssueFeatureValueDisplay
-        {
-            public int Id { get; set; }
-            public int IssueId { get; set; }
-            public int FeatureValueId { get; set; }
-            public string IssueName { get; set; }
-            public string FeatureValue { get; set; }
-        }
+        private Issue _selectedIssue;
 
         public IssueFeatureValuesWindow()
         {
             InitializeComponent();
-
             _context = new AppDbContext();
+            cbIssues.ItemsSource = _context.Issues.ToList();
+            cbIssues.SelectionChanged += CbIssues_SelectionChanged;
+        }
 
-            dataGridIssueFeatureValues.ItemsSource = _context.IssueFeatureValues
-                .Select(ifv => new IssueFeatureValueDisplay
-                {
-                    Id = ifv.Id,
-                    IssueName = ifv.Issue.Name,
-                    FeatureValue = ifv.FeatureValue.Value
-                })
+        private void UpdateFeatureValuesList(int issueId)
+        {
+            var relatedFeatureValueIds = _context.IssueFeatureValues
+                .Where(ifv => ifv.IssueId == issueId)
+                .Select(ifv => ifv.FeatureValueId)
                 .ToList();
+
+            var featureValues = _context.FeatureValues
+                .Where(fv => relatedFeatureValueIds.Contains(fv.Id))
+                .ToList();
+
+            lbAllFeatureValues.ItemsSource = featureValues;
+        }
+
+        private void CbIssues_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (cbIssues.SelectedItem is Issue selectedIssue)
+            {
+                _selectedIssue = selectedIssue;
+                UpdateFeatureValuesList(_selectedIssue.Id);
+                lbIssueFeatureValues.ItemsSource = _context.IssueFeatureValues.Where(ifv => ifv.IssueId == _selectedIssue.Id).Select(ifv => ifv.FeatureValue).ToList();
+            }
         }
 
         private void btnAdd_Click(object sender, RoutedEventArgs e)
         {
-            var editWindow = new IssueFeatureValueEditWindow();
-            if (editWindow.ShowDialog() == true)
+            if (_selectedIssue != null && lbAllFeatureValues.SelectedItem is FeatureValue selectedFeatureValue)
             {
-                var issueFeatureValue = editWindow.IssueFeatureValue;
-
-                // Получите существующие объекты Issue и FeatureValue из базы данных
-                var existingIssue = _context.Issues.Find(issueFeatureValue.Issue.Id);
-                var existingFeatureValue = _context.FeatureValues.Find(issueFeatureValue.FeatureValue.Id);
-
-                // Создайте новый объект IssueFeatureValue с использованием существующих объектов
-                var newIssueFeatureValue = new IssueFeatureValue
+                var issueFeatureValue = new IssueFeatureValue
                 {
-                    Issue = existingIssue,
-                    FeatureValue = existingFeatureValue
+                    IssueId = _selectedIssue.Id,
+                    FeatureValueId = selectedFeatureValue.Id
                 };
-
-                _context.IssueFeatureValues.Add(newIssueFeatureValue);
+                _context.IssueFeatureValues.Add(issueFeatureValue);
                 _context.SaveChanges();
-
-                dataGridIssueFeatureValues.ItemsSource = _context.IssueFeatureValues
-                    .Select(ifv => new IssueFeatureValueDisplay
-                    {
-                        Id = ifv.Id,
-                        IssueName = ifv.Issue.Name,
-                        FeatureValue = ifv.FeatureValue.Value
-                    })
-                    .ToList();
-            }
-        }
-
-        private void btnEdit_Click(object sender, RoutedEventArgs e)
-        {
-            if (dataGridIssueFeatureValues.SelectedItem is IssueFeatureValueDisplay selectedDisplayItem)
-            {
-                var issueFeatureValue = _context.IssueFeatureValues.Find(selectedDisplayItem.Id);
-                var editWindow = new IssueFeatureValueEditWindow(issueFeatureValue);
-                if (editWindow.ShowDialog() == true)
-                {
-                    _context.SaveChanges();
-
-                    dataGridIssueFeatureValues.ItemsSource = _context.IssueFeatureValues
-                        .Select(ifv => new IssueFeatureValueDisplay
-                        {
-                            Id = ifv.Id,
-                            IssueName = ifv.Issue.Name,
-                            FeatureValue = ifv.FeatureValue.Value
-                        })
-                        .ToList();
-                }
+                lbIssueFeatureValues.ItemsSource = _context.IssueFeatureValues.Where(ifv => ifv.IssueId == _selectedIssue.Id).Select(ifv => ifv.FeatureValue).ToList();
             }
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            if (dataGridIssueFeatureValues.SelectedItem is IssueFeatureValueDisplay selectedDisplayItem)
+            if (lbIssueFeatureValues.SelectedItem is FeatureValue selectedFeatureValue)
             {
-                var issueFeatureValue = _context.IssueFeatureValues.FirstOrDefault(ifv => ifv.IssueId == selectedDisplayItem.IssueId && ifv.FeatureValueId == selectedDisplayItem.FeatureValueId);
+                var issueFeatureValue = _context.IssueFeatureValues.FirstOrDefault(ifv => ifv.IssueId == _selectedIssue.Id && ifv.FeatureValueId == selectedFeatureValue.Id);
 
                 if (issueFeatureValue != null)
                 {
                     _context.IssueFeatureValues.Remove(issueFeatureValue);
                     _context.SaveChanges();
+                    lbIssueFeatureValues.ItemsSource = _context.IssueFeatureValues.Where(ifv => ifv.IssueId == _selectedIssue.Id).Select(ifv => ifv.FeatureValue).ToList();
                 }
-
-                dataGridIssueFeatureValues.ItemsSource = _context.IssueFeatureValues
-                    .Select(ifv => new IssueFeatureValueDisplay
-                    {
-                        Id = ifv.Id,
-                        IssueId = ifv.IssueId,
-                        FeatureValueId = ifv.FeatureValueId,
-                        IssueName = ifv.Issue.Name,
-                        FeatureValue = ifv.FeatureValue.Value
-                    })
-                    .ToList();
             }
         }
-
     }
 }
